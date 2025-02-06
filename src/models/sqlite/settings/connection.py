@@ -11,7 +11,7 @@ class DBConnectionHandler:
         self.__engine = create_engine(self.__connection_string)
 
     def get_engine(self):
-        return self.__engine 
+        return self.__engine
     
     def __enter__(self):
         session_maker = sessionmaker()
@@ -21,6 +21,4 @@ class DBConnectionHandler:
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.session.close()
 
-
-    
 db_connection_handler = DBConnectionHandler()

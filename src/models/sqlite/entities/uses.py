@@ -1,9 +1,7 @@
 import uuid
-
 from sqlalchemy import Column, String, Boolean
 from sqlalchemy.dialects.postgresql import UUID
-
-from src.config.sql_alchemy.base import Base
+from src.models.sqlite.settings.base import Base
 
 
 class UsersTable(Base):

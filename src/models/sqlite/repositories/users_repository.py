@@ -1,12 +1,10 @@
-from sqlite3 import Connection as SQLiteConnection
 from sqlalchemy.orm.exc import NoResultFound
 
-from src.config.sql_alchemy.entities.users import UsersTable
-from .users_repository_interface import UsersRepositoryInterface
+from src.models.sqlite.entities.uses import UsersTable
 
 
-class UsersRepository(UsersRepositoryInterface):
-    def __init__(self, db_connection: SQLiteConnection) -> None:
+class UsersRepository:
+    def __init__(self, db_connection) -> None:
         self.__db_connection = db_connection
 
     def list_users(self) -> list[UsersTable]:
