@@ -12,6 +12,8 @@ disable=
       E0001, # Syntax-error
       W0719, # Broad-exception-raised
       R0913, # Too-many-arguments
+      W0621, # Redefined-outer-name
+      C0301, # Line-too-long
 
 # Analyse import fallback blocks. This can be used to support both Python 2 and
 # 3 compatible code, which means that the block might have code that exists
@@ -321,7 +323,7 @@ max-locals=15
 max-parents=7
 
 # Maximum number of positional arguments for function / method.
-max-positional-arguments=5
+max-positional-arguments=6
 
 # Maximum number of public methods for a class (see R0904).
 max-public-methods=20

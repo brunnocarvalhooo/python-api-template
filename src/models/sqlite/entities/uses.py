@@ -18,6 +18,7 @@ class UsersTable(Base):
 
     def __repr__(self):
         return "Users [" + ", ".join([
+            f"id={self.id}",
             f"name={self.name}",
             f"email={self.email}",
             f"whatsapp={self.whatsapp}",
