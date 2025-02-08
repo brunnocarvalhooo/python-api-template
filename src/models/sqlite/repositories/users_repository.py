@@ -1,9 +1,10 @@
 from sqlalchemy.orm.exc import NoResultFound
 
 from src.models.sqlite.entities.uses import UsersTable
+from src.models.sqlite.interfaces.users_repository import UsersRepositoryInterface
 
 
-class UsersRepository:
+class UsersRepository(UsersRepositoryInterface):
     def __init__(self, db_connection) -> None:
         self.__db_connection = db_connection
 
@@ -22,7 +23,6 @@ class UsersRepository:
                     whatsapp=whatsapp,
                     password=password,
                     status=True,
-                    active=False
                 )
                 database.session.add(user)
                 database.session.commit()
@@ -40,11 +40,14 @@ class UsersRepository:
     def get_by_id(self, id_user: str) -> UsersTable | None:
         with self.__db_connection as database:
             try:
-                print(f"Buscando usuário com ID: {id_user}")  # Imprimir o ID que está sendo buscado
-                user = database.session.query(UsersTable).filter(str(UsersTable.id) == str(id_user)).first()
-                print(f"Usuário encontrado: {user}")  # Imprimir o usuário encontrado
+                user = database.session.query(UsersTable).filter(UsersTable.id == id_user).with_entities(
+                    UsersTable.id,
+                    UsersTable.name,
+                    UsersTable.email,
+                    UsersTable.whatsapp,
+                ).one_or_none() 
                 return user
-            except NoResultFound:
+            except NoResultFound:  
                 return None
 
     def update(
@@ -53,12 +56,10 @@ class UsersRepository:
         name: str = None,
         whatsapp: str = None,
         password: str = None,
-        active: bool = None
     ) -> bool:
         with self.__db_connection as database:
             try:
-                user = database.session.query(
-                    UsersTable).filter_by(id=id_user).first()
+                user = database.session.query(UsersTable).filter_by(id=id_user).one_or_none()
                 if not user:
                     return False
 
@@ -68,8 +69,6 @@ class UsersRepository:
                     user.whatsapp = whatsapp
                 if password:
                     user.password = password
-                if active is not None:
-                    user.active = active
 
                 database.session.commit()
                 return True
@@ -81,8 +80,7 @@ class UsersRepository:
     def delete(self, id_user: str) -> bool:
         with self.__db_connection as database:
             try:
-                user = database.session.query(
-                    UsersTable).filter_by(id=id_user).first()
+                user = database.session.query(UsersTable).filter_by(id=id_user).first()
                 if not user:
                     return False
 
